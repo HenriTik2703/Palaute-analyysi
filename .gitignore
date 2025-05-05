@@ -5,3 +5,6 @@ __pycache__/
 .env
 .ipynb_checkpoints/
 .DS_Store
+# React build artifacts
+frontend/palaute-dashboard/node_modules/
+frontend/palaute-dashboard/build/
