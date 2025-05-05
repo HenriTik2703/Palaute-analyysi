@@ -33,6 +33,10 @@ app = FastAPI()
 class FeedbackInput(BaseModel):
     text: str
 
+class FeedbackBatchRequest(BaseModel):
+    feedbacks: list[str]
+
+
 # === Aiheteemojen tunnistus ===
 def detect_topic(text):
     themes = {
