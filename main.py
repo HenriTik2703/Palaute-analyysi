@@ -95,3 +95,39 @@ def health():
 def analyze_feedback(input: FeedbackInput):
     analysis = full_analysis(input.text)
     return analysis
+
+@app.post("/batch_analyze")
+def batch_analyze(request: FeedbackBatchRequest):
+    feedbacks = request.feedbacks
+
+    results = {
+        "total": len(feedbacks),
+        "positive": 0,
+        "negative": 0,
+        "neutral": 0,
+        "summaries": []
+    }
+
+    for text in feedbacks:
+        analysis = full_analysis(text, all_feedbacks=feedbacks)
+        label = analysis["sentiment"].upper()
+
+        if label == "POSITIVE":
+            results["positive"] += 1
+        elif label == "NEGATIVE":
+            results["negative"] += 1
+        else:
+            results["neutral"] += 1
+
+        results["summaries"].append(analysis["summary"])
+
+    def percentage(count):
+        return round(100 * count / results["total"], 1) if results["total"] > 0 else 0.0
+
+    return {
+        "total_feedbacks": results["total"],
+        "positive_percent": percentage(results["positive"]),
+        "negative_percent": percentage(results["negative"]),
+        "neutral_percent": percentage(results["neutral"]),
+        "summary_sentences": results["summaries"]
+    }
