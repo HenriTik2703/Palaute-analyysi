@@ -8,6 +8,7 @@ Original file is located at
 """
 
 # main.py
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI
 from pydantic import BaseModel
